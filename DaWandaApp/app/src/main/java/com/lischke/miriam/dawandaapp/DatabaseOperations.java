@@ -8,87 +8,105 @@ import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
-import com.lischke.miriam.dawandaapp.model.ConversationModel.ConvContext;
-import com.lischke.miriam.dawandaapp.model.ConversationModel.Conversation;
-import com.lischke.miriam.dawandaapp.model.ConversationModel.Messages;
-import com.lischke.miriam.dawandaapp.model.ConversationModel.Order;
-import com.lischke.miriam.dawandaapp.model.ConversationModel.Product;
-import com.lischke.miriam.dawandaapp.model.ConversationModel.User;
-import com.lischke.miriam.dawandaapp.model.Shop;
+import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbConvContext;
+import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbConversation;
+import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbDatabaseNames;
+import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbMessageDetails;
+import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbOrder;
+import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbProduct;
+import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbShop;
+import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbUser;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  * Created by Miriam on 15.07.2016.
  */
+
 public class DatabaseOperations extends OrmLiteSqliteOpenHelper {
 
-
-    public static final String database_name = "conversations_database.db";
-    public static final int database_version = 1;
-
-
-    private Dao<Product, Integer> productDao = null;
-    private Dao<Conversation, Integer> conversationsDao = null;
-    private Dao<Shop, Integer> shopDao = null;
-    private Dao<User, Integer> userDao = null;
-    private Dao<Order, Integer> orderDao = null;
-    private Dao<Messages, Integer> messagesDao = null;
-    private Dao<ConvContext, Integer> convConDao = null;
+    public ArrayList storeDatabaseName;
+    public static  String database_name;
+    public static  int database_version = 1;
 
 
-    public DatabaseOperations(Context context) {
-        super(context, database_name, null, database_version);
-        Log.d("Database Operations","Created Database");
+    private Dao<DbProduct, Integer> productDao = null;
+    private Dao<DbConversation, Integer> conversationsDao = null;
+    private Dao<DbShop, Integer> shopDao = null;
+    private Dao<DbUser, Integer> userDao = null;
+    private Dao<DbOrder, Integer> orderDao = null;
+    private Dao<DbMessageDetails, Integer> messagesDao = null;
+    private Dao<DbConvContext, Integer> convConDao = null;
+    private Dao<DbDatabaseNames, Integer> databaseNames = null;
+
+    public DatabaseOperations(Context context){
+
+        super(context, ""+ConversationsActivity.responsebody.get(0).getContext().getMe().getId(), null, database_version);
+        Log.d("Database Operations","Created Database: "+database_name);
+
     }
+
+    public DatabaseOperations(Context context, String name) {
+        super(context, name, null, database_version);
+        Log.d("Database Operations", "Created Database: " + database_name);
+    }
+
+//        String.valueOf(context.getText(R.id.db_name))
+
+
 
 
     @Override
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
 
-
         try {
-            TableUtils.createTable(connectionSource, Product.class);
+            TableUtils.createTable(connectionSource, DbProduct.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         try {
-            TableUtils.createTable(connectionSource, Conversation.class);
+            TableUtils.createTable(connectionSource, DbConversation.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         try {
-            TableUtils.createTable(connectionSource, Shop.class);
+            TableUtils.createTable(connectionSource, DbShop.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         try {
-            TableUtils.createTable(connectionSource, User.class);
+            TableUtils.createTable(connectionSource, DbUser.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         try {
-            TableUtils.createTable(connectionSource, Order.class);
+            TableUtils.createTable(connectionSource, DbOrder.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         try {
-            TableUtils.createTable(connectionSource, Messages.class);
+            TableUtils.createTable(connectionSource, DbMessageDetails.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         try {
-            TableUtils.createTable(connectionSource, ConvContext.class);
+            TableUtils.createTable(connectionSource, DbConvContext.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        try {
+            TableUtils.createTable(connectionSource, DbDatabaseNames.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         Log.d("Database Operations","Created Table");
     }
@@ -98,9 +116,11 @@ public class DatabaseOperations extends OrmLiteSqliteOpenHelper {
 
     }
 
-    public Dao<Product, Integer> getProductDao() throws SQLException {
+
+
+    public Dao<DbProduct, Integer> getProductDao() throws SQLException {
         if (productDao == null) {
-            productDao = getDao(Product.class);
+            productDao = getDao(DbProduct.class);
         }
 
         return productDao;
@@ -115,9 +135,9 @@ public class DatabaseOperations extends OrmLiteSqliteOpenHelper {
 
 
 
-    public Dao<Conversation, Integer> getConversationDao() throws SQLException {
+    public Dao<DbConversation, Integer> getConversationDao() throws SQLException {
         if (conversationsDao == null) {
-            conversationsDao = getDao(Conversation.class);
+            conversationsDao = getDao(DbConversation.class);
         }
 
         return conversationsDao;
@@ -133,9 +153,9 @@ public class DatabaseOperations extends OrmLiteSqliteOpenHelper {
 
 
 
-    public Dao<Shop, Integer> getShopDao() throws SQLException {
+    public Dao<DbShop, Integer> getShopDao() throws SQLException {
         if (shopDao == null) {
-            shopDao = getDao(Shop.class);
+            shopDao = getDao(DbShop.class);
         }
 
         return shopDao;
@@ -152,9 +172,9 @@ public class DatabaseOperations extends OrmLiteSqliteOpenHelper {
 
 
 
-    public Dao<User, Integer> getUserDao() throws SQLException {
+    public Dao<DbUser, Integer> getUserDao() throws SQLException {
         if (userDao == null) {
-            userDao = getDao(User.class);
+            userDao = getDao(DbUser.class);
         }
 
         return userDao;
@@ -170,9 +190,9 @@ public class DatabaseOperations extends OrmLiteSqliteOpenHelper {
 
 
 
-    public Dao<Messages, Integer> getMessagesDao() throws SQLException {
+    public Dao<DbMessageDetails, Integer> getMessagesDao() throws SQLException {
         if (messagesDao == null) {
-            messagesDao = getDao(Messages.class);
+            messagesDao = getDao(DbMessageDetails.class);
         }
 
         return messagesDao;
@@ -188,9 +208,9 @@ public class DatabaseOperations extends OrmLiteSqliteOpenHelper {
 
 
 
-    public Dao<Order, Integer> getOrderDao() throws SQLException {
+    public Dao<DbOrder, Integer> getOrderDao() throws SQLException {
         if (orderDao == null) {
-            orderDao = getDao(Order.class);
+            orderDao = getDao(DbOrder.class);
         }
 
         return orderDao;
@@ -206,10 +226,9 @@ public class DatabaseOperations extends OrmLiteSqliteOpenHelper {
 
 
 
-
-    public Dao<ConvContext, Integer> getConvConDao() throws SQLException {
+    public Dao<DbConvContext, Integer> getConvConDao() throws SQLException {
         if (convConDao == null) {
-            convConDao = getDao(ConvContext.class);
+            convConDao = getDao(DbConvContext.class);
         }
 
         return convConDao;
@@ -221,5 +240,27 @@ public class DatabaseOperations extends OrmLiteSqliteOpenHelper {
 
         super.close();
     }
+
+    public Dao<DbDatabaseNames, Integer> getDatabasenameList() throws SQLException {
+        if (databaseNames == null) {
+            databaseNames = getDao(DbDatabaseNames.class);
+        }
+
+        return databaseNames;
+    }
+
+
+    public void databasenameListClose() {
+
+
+        super.close();
+    }
+
+
+//    GenericRawResults<String[]> results =
+//           dao.queryRaw("SELECT name FROM sqlite_master WHERE type = 'table'");
+//    for (String[] result : results) {
+//        System.out.println("One table is: " + result[0]);
+//    }
 
 }

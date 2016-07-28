@@ -14,4 +14,21 @@
 # class:
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
+
+#OrmLite uses reflection
+#-keep class com.j256.**
+#-keepclassmembers class com.j256.** { *; }
+#-keep enum com.j256.**
+#-keepclassmembers enum com.j256.** { *; }
+#-keep interface com.j256.**
+#-keepclassmembers interface com.j256.** { *; }
+
+#We are not done yet, add the following as well.
+
+#-keepclassmembers class * {
+ #   public <init>(android.content.Context);
+ #}
+
+#-keepattributes *Annotation*
+
 #}

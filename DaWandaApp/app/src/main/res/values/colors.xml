@@ -1,6 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="darkRed">#8B0000</color>
+    <color name="red">#CC0033</color>
+    <color name="white">#ffffff</color>
+
+
+
+
+    <color name="dw_gray">#686e69</color>
+    <color name="dw_white">#ffffff</color>
+    <color name="dw_white_50a">#7effffff</color>
+    <color name="dw_green">#00aaa4</color>
+    <color name="dw_light_gray">#a59f9e</color>
+    <color name="dw_light_gray_50a">#7ea59f9e</color>
+    <color name="dw_beige">#f5efe9</color>
+    <color name="dw_light_beige">#f8f4f0</color>
+    <color name="dw_red">#cc1212</color>
+    <color name="dw_dark_gray">#3B3938</color>
+    <color name="dw_black">#000</color>
+    <color name="dw_black_60a">#99000000</color>
+
+    <color name="overlay_diy_more">#33000000</color>
+
+
+    <color name="control_selectable_color">@color/dw_light_gray_50a</color>
+
+    <color name="btn_action_disabled_color">@color/dw_light_gray</color>
+
+    <color name="btn_delete_color">@color/dw_red</color>
+    <color name="btn_delete_pressed_color">#a10f0f</color>
+
+    <color name="white_text">#ffffff</color>
+    <color name="dark_text">#3B3938</color>
+    <color name="light_text">#d5d5d5</color>
+    <color name="light_border_product">#ebeae6</color>
+    <color name="grey_text">#a59f9e</color>
+    <color name="item_overlay">#b2ffffff</color>
+    <color name="list_background">#F6F5F2</color>
+    <color name="red_text">#cc1212</color>
+    <color name="green_text">#00aaa4</color>
+    <color name="orange_text">#ffac00</color>
+    <color name="category_light_grey_background">#F5F5F5</color>
+    <color name="category_light_grey_pressed_background">#dfdfdf</color>
+    <color name="category_dark_grey_background">#EDEDED</color>
+    <color name="category_dark_grey_pressed_background">#d1d1d1</color>
+    <color name="category_dark_grey_e3_background">#e6e6e6</color>
+    <color name="category_dark_grey_e3_pressed_background">#cccccc</color>
+    <color name="actionbutton_normal_background_color">@color/green_text</color>
+    <color name="actionbutton_pressed_background_color">#00837f</color>
+    <color name="actionbutton_disabled_background_color">@color/grey_text</color>
+    <color name="divider_color">@color/light_text</color>
+    <color name="details_summary_background_color">#ffffff</color>
+    <color name="neutralbutton_normal_background_color">@color/white_text</color>
+    <color name="neutralbutton_pressed_background_color">#f6f5f2</color>
+    <color name="neutralbutton_stroke_color">@color/dark_text</color>
+    <color name="transparentbutton_pressed_background_color">#7effffff</color>
+    <color name="checkout_button_enabled">#00aaa4</color>
+    <color name="checkout_button_pressed">#008b86</color>
+    <color name="green_theme">#07a6a1</color>
+    <color name="window_background_color">#f6f5f1</color>
+    <color name="borderless_button_divider">#dadada</color>
+    <color name="pay_pal_blue_light">#009CDE</color>
+    <color name="pay_pal_blue_dark">#002F86</color>
+    <color name="dw_black_100a">#00000000</color>
 </resources>

@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.lischke.miriam.dawandaapp.model.Session;
@@ -28,8 +28,8 @@ import retrofit2.http.POST;
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextView email;
-    TextView password;
+    EditText email;
+    EditText password;
     Button enterButton;
 
 
@@ -52,8 +52,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        email = (TextView) findViewById(R.id.email);
-        password = (TextView) findViewById(R.id.password);
+        email = (EditText) findViewById(R.id.email);
+        password = (EditText) findViewById(R.id.password);
         enterButton = (Button) findViewById(R.id.email_sign_in_button);
 
         enterButton.setOnClickListener(new OnClickListener(){
@@ -86,15 +86,14 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call<Session> call, Response<Session> response) {
-//                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null) {
                     Singleton.getInstance().setSession(response.body());
                     Toast.makeText(LoginActivity.this,"Your Login was Successful!",Toast.LENGTH_LONG).show();
-                    Log.d("onCreate","Singleton Instance: "+ Singleton.getInstance().getSession().toString());
                     startActivity(new Intent(getApplicationContext(),ConversationsActivity.class));
-//                }else{
-//                    Toast.makeText(LoginActivity.this,"Fehler!!",Toast.LENGTH_LONG).show();
-//                    Log.d("LoginActivity Request ", "Fehler!!!");
-//                }
+                }else{
+                    Toast.makeText(LoginActivity.this,"Fehler!!",Toast.LENGTH_LONG).show();
+                    Log.d("LoginActivity Request ", "Fehler!!!");
+                }
             }
             @Override
             public void onFailure(Call<Session> call, Throwable t) {
