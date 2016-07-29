@@ -3,9 +3,11 @@ package com.lischke.miriam.dawandaapp;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
@@ -23,6 +25,7 @@ import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbOrder;
 import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbProduct;
 import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbShop;
 import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbUser;
+import com.lischke.miriam.dawandaapp.model.RVConvDetailsAdapter;
 import com.lischke.miriam.dawandaapp.model.Session;
 import com.lischke.miriam.dawandaapp.model.Singleton;
 
@@ -51,6 +54,7 @@ public class ConversationsActivity extends AppCompatActivity {
      */
     private GoogleApiClient client2;
     RecyclerView rv;
+    CardView cv;
     RVAdapter adapter;
 //    public static String dbName;
     public ArrayList storeDatabaseName = new ArrayList();
@@ -113,7 +117,12 @@ public class ConversationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conversations);
 
-        rv = (RecyclerView)findViewById(R.id.rv_l);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client2 = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+
+        rv = (RecyclerView) findViewById(R.id.rv_l);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rv.setLayoutManager(llm);
@@ -121,7 +130,7 @@ public class ConversationsActivity extends AppCompatActivity {
 
         final Session s = Singleton.getInstance().getSession();
 
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+        final OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.addInterceptor(new Interceptor() {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
@@ -159,12 +168,14 @@ public class ConversationsActivity extends AppCompatActivity {
             public void onResponse(Call<List<Conversation>> call, Response<List<Conversation>> response) {
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
 
-                        responsebody = response.body();
+                    responsebody = response.body();
 //                        ConversationsActivity.this.deleteDatabase("23157363");
 
-                        Log.d("Retrofit onResponse","My ID: "+response.body().get(0).getContext().getMe().getId());
-                        DatabaseOperations db = new DatabaseOperations(ConversationsActivity.this,""+response.body().get(0).getContext().getMe().getId());
-                        insertData(response,db);
+                    Log.d("Retrofit onResponse", "My ID: " + response.body().get(0).getContext().getMe().getId());
+                    DatabaseOperations db = new DatabaseOperations(ConversationsActivity.this, "" + response.body().get(0).getContext().getMe().getId());
+
+//                    ConversationsActivity.this.deleteDatabase("26685803");
+                    insertData(response, db);
 
                 } else {
                     Toast.makeText(ConversationsActivity.this, "DbConversation Request Fehler!!", Toast.LENGTH_LONG).show();
@@ -184,10 +195,69 @@ public class ConversationsActivity extends AppCompatActivity {
 
 
         });
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client2 = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
+
+        cv = (CardView) findViewById(R.id.cv_l);
+
+
+
+}
+
+public void onClick(View view){
+
+    int id =  view.getId();
+
+
+    builderDetailAdapter(id);
+}
+
+
+    public void builderDetailAdapter(int id){
+
+        List<DbMessageDetails> mList = null;
+        List<DbMessageDetails> fullmList = null;
+        List<DbUser> uList = null;
+        List<DbConvContext> cList = null;
+        List<DbConversation> conList = null;
+        DatabaseOperations helper = OpenHelperManager.getHelper(this, DatabaseOperations.class);
+
+
+        try {
+
+            Dao<DbConversation, Integer> conDao = helper.getConversationDao();
+            Dao<DbMessageDetails, Integer> mDao = helper.getMessagesDao();
+            Dao<DbMessageDetails, Integer> fullmDao = helper.getMessagesDao();
+            Dao<DbConvContext, Integer> cDao = helper.getConvConDao();
+
+            fullmList = mDao.queryForAll();
+            conList = conDao.queryForAll();
+            cList = cDao.queryForAll();
+
+
+            for (int j = 0; j<conList.size(); j++) {
+
+                if (id == conList.get(j).getContext()) {
+
+                    for (int i = 0; i < fullmList.size(); i++) {
+
+                        mList = mDao.queryForEq(DbMessageDetails.mess_reciver, cList.get(i).getMe());
+                        Log.d("ConversationActivity", "mListe: "+mList.size());
+//                        mList = mDao.queryForEq(DbMessageDetails.mess_sender, cList.get(i).getMe());
+//                        Log.d("ConversationActivity", "mListe: "+mList.size());
+                    }
+                }
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        OpenHelperManager.releaseHelper();
+        helper.databasenameListClose();
+
+        RVConvDetailsAdapter detailsAdapter = new RVConvDetailsAdapter(this, mList, cList, uList);
+        rv.setAdapter(detailsAdapter);
     }
 
 
@@ -197,7 +267,7 @@ public class ConversationsActivity extends AppCompatActivity {
         String id = ""+responsebody.get(0).getContext().getMe().getId();
         boolean check =checkData(id, responsebody.get(0));
 
-        if(check){
+        if(id == id){
 
             getData();
         }
@@ -303,7 +373,11 @@ public void getData(){
 
         Dao<DbUser, Integer> userDao = helper.getUserDao();
         List<DbUser>  userList = userDao.queryForAll();
-        adapter = new RVAdapter(this,messagList,userList);
+
+        Dao<DbConvContext, Integer> convconDao = helper.getConvConDao();
+        List<DbConvContext>  convconList = convconDao.queryForAll();
+
+        adapter = new RVAdapter(this,messagList,userList,convconList);
         rv.setAdapter(adapter);
 
     } catch (SQLException e) {
@@ -315,7 +389,7 @@ public void getData(){
     helper.userClose();
 
 }
-
+///Funktioniert nicht wirklich!!!
     public boolean checkData(String name,Conversation conv){
         List<DbDatabaseNames> databaseNames = null;
         DatabaseOperations helper = OpenHelperManager.getHelper(this,DatabaseOperations.class);

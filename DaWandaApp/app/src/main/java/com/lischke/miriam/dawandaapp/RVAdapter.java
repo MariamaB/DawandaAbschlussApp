@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbConvContext;
 import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbMessageDetails;
 import com.lischke.miriam.dawandaapp.model.DatabaseModel.DbUser;
 import com.squareup.picasso.Picasso;
@@ -24,13 +25,15 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ConversationViewHo
     private  Context context;
     List<DbMessageDetails> messagesList;
     List<DbUser> userList;
+    List<DbConvContext> convconList;
 
 
-    public RVAdapter(Context context, List<DbMessageDetails>  mList, List<DbUser> uList){
+    public RVAdapter(Context context, List<DbMessageDetails>  mList, List<DbUser> uList, List<DbConvContext> cList){
 
         this.context = context;
         this.messagesList = mList;
         this.userList = uList;
+        this.convconList = cList;
 
         Log.d("RVAdapter","Created ADAPTER");
     }
@@ -63,7 +66,9 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ConversationViewHo
                 .into(holder.senderPhoto);
 
         holder.senderName.setText(sender.getUsername());
+//        holder.conversationId.setText(convconList.get(position).getOrder());
         holder.conversationText.setText(message.getText());
+        holder.cv.setId(convconList.get(position).getOrder());
 
 
     }
@@ -84,14 +89,25 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.ConversationViewHo
         public ImageView senderPhoto;
         public TextView senderName;
         public TextView conversationText;
+        public TextView conversationId;
 
         public ConversationViewHolder(View itemView) {
             super(itemView);
 
             cv = (CardView) itemView.findViewById(R.id.cv_l);
-            senderPhoto = (ImageView) itemView.findViewById(R.id.sender_photo);
-            senderName = (TextView) itemView.findViewById(R.id.sender_name);
-            conversationText = (TextView) itemView.findViewById(R.id.conversation_text);
+            senderPhoto = (ImageView) itemView.findViewById(R.id.sender_photo1);
+            senderName = (TextView) itemView.findViewById(R.id.sender_name1);
+            conversationText = (TextView) itemView.findViewById(R.id.conversation_text1);
+            conversationId = (TextView) itemView.findViewById(R.id.conversation_id);
+
+//            cv.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                    ConversationsActivity.bruecke(cv.getId());
+//                }
+//            });
+
         }
     }
 }
